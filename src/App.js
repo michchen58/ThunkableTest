@@ -9,18 +9,19 @@ import AddButton from './Components/AddButton.jsx';
 const AppElt = styled.div`
   display: flex;
   flex-direction: column;
+  position: relative;
+  width: 100%;
+  min-width: 500px;
+  max-width: 1000px;
   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
   font-weight: 300;
-  max-width: 1000px;
-  position:relative;
 `;
 
-// padding: 0px 5%;
 const ListElt = styled.ul`
   width: 88%;
   padding: 0;
   margin: 63px 6%;
-  border: 1px solid rgb(230, 230, 250);
+  border: 1px solid #e9e9e9;
   border-width: 0 0 1px 0;
 `;
 
@@ -31,7 +32,13 @@ const ProjectsHeader = styled.div`
   display:block;
   margin-top: 45px;
   padding: 0 0 5px 5%;
-  border-bottom: 2px solid red;
+`;
+const LineElt = styled.div`
+  position:absolute;
+  top:120px;
+  width:100%;
+  height:2px;
+  background-color: #e9e9e9;
 `;
 
 const LogoElt = styled.img`
@@ -40,6 +47,13 @@ const LogoElt = styled.img`
   margin-left: 5%;
 `;
 
+const EmptyMsg = styled.span`
+  color: #666;
+  font-style: italic;
+  margin: 85px 6%;
+  text-align: center;
+  font-weight:600;
+`;
 
 
 class App extends Component {
@@ -50,7 +64,7 @@ class App extends Component {
       items: {
         '1' : {
           name: 'Coding Test',
-          editing: false,
+          editing: true,
         }
       },
       order: ['1'],
@@ -149,22 +163,32 @@ class App extends Component {
   render() {
     // <HeaderLogo></HeaderLogo>
     return (
-      <AppElt>
-        <AddButton clickCb={this.addNewItem}/>
-        <LogoElt src="./img/ThunkableBeaver.png" alt="Thunkable Logo" />
-        <ProjectsHeader>My Projects</ProjectsHeader>
-        <ListElt>
-          {this.state.order.map(dataItem => (
-              <ListItem data={this.state.items[dataItem]}
-                        key={dataItem}
-                        itemKey={dataItem}
-                        startEditCb={this.startEdit}
-                        submitCb={this.submitEdit}
-                        deleteCb={this.deleteItem}
-              />
-            ))}
-          </ListElt>
-      </AppElt>
+      <React.Fragment>
+        <LineElt />
+        <AppElt className="noselect">
+          <AddButton clickCb={this.addNewItem}/>
+          <LogoElt src="./img/ThunkableBeaver.png" alt="Thunkable Logo" />
+          <ProjectsHeader>My Projects</ProjectsHeader>
+
+            {this.state.order.length > 0
+              ? <ListElt>
+                {
+                  this.state.order.map(dataItem => (
+                    <ListItem data={this.state.items[dataItem]}
+                              key={dataItem}
+                              itemKey={dataItem}
+                              startEditCb={this.startEdit}
+                              submitCb={this.submitEdit}
+                              deleteCb={this.deleteItem}
+                    />
+                  ))
+                }
+              </ListElt>
+              : <EmptyMsg>Add a project by clicking the + button above.</EmptyMsg>
+            }
+
+        </AppElt>
+      </React.Fragment>
     );
   }
 }

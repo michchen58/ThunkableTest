@@ -11,7 +11,7 @@ const ItemElt = styled.li`
   height: 68px;
   padding: 0 75px;
   margin: 0;
-  border: 0px solid rgb(230, 230, 250);
+  border: 0px solid #e9e9e9;
   border-width: 1px 0 0 0;
   display: flex;
   flex-direction: row;
@@ -28,7 +28,7 @@ const TitleElt = styled.h2`
   color:#333;
   font-weight:600;
   width: 25%;
-  min-width: 140px;
+  min-width: 120px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -62,13 +62,13 @@ class ListItem extends Component {
       <ItemElt className="list-item">
         {this.props.data.editing
           /* input box */
-          ? <span>
+          ? <React.Fragment>
               <Input submitCb={event => this.props.submitCb(event, this.props.itemKey, this.state.text)}
                      onChangeCb={this.addItemInputOnChange}
                      inputText={this.state.text}
                      itemKey={this.props.itemKey}
               />
-            </span>
+            </React.Fragment>
 
           /* text only */
           : <React.Fragment>
