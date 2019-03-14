@@ -1,8 +1,46 @@
 import React, { Component } from 'react';
+import styled from 'styled-components';
 import './App.css';
+import utils from './utils.js'
 
 import ListItem from './Components/ListItem.jsx';
 import AddButton from './Components/AddButton.jsx';
+
+const AppElt = styled.div`
+  display: flex;
+  flex-direction: column;
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-weight: 300;
+  max-width: 1000px;
+  position:relative;
+`;
+
+// padding: 0px 5%;
+const ListElt = styled.ul`
+  width: 88%;
+  padding: 0;
+  margin: 63px 6%;
+  border: 1px solid rgb(230, 230, 250);
+  border-width: 0 0 1px 0;
+`;
+
+const ProjectsHeader = styled.div`
+  width: 100%;
+  text-transform: uppercase;
+  height: 20px;
+  display:block;
+  margin-top: 45px;
+  padding: 0 0 5px 5%;
+  border-bottom: 2px solid red;
+`;
+
+const LogoElt = styled.img`
+  width: 35px;
+  margin-top: 10px;
+  margin-left: 5%;
+`;
+
+
 
 class App extends Component {
   constructor(props) {
@@ -10,23 +48,15 @@ class App extends Component {
 
     this.state = {
       items: {
-        'one' : {
-          name: 'name of one',
-          editing: true,
-        },
-        'two' : {
-          name: 'name of one',
-          editing: false
-        },
-        'three' : {
-          name: 'name of one',
-          editing: false
-        },
+        '1' : {
+          name: 'Coding Test',
+          editing: false,
+        }
       },
-      order: ['one', 'two', 'three'],
+      order: ['1'],
       addingItem: false,
       newItem: '',
-      itemCounter: 0
+      itemCounter: 1
     }
     this.addNewItem = this.addNewItem.bind(this);
     this.deleteItem = this.deleteItem.bind(this);
@@ -36,35 +66,17 @@ class App extends Component {
 
   }
 
-  /* UTILITIES */
-
-  deepcopy(obj) {
-    if (Array.isArray(obj)) {
-      let newObj = obj.slice();
-      return newObj;
-    } else {
-      return JSON.parse(JSON.stringify(obj));
-    }
-  }
-
-  timestamp() {
-    let d = new Date();
-    let monthString = ['Jan', 'Feb', 'Mar', 'Apr', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    return `${monthString[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()} ${d.getHours() % 12}:${d.getMinutes()} ${d.getHours() < 12 ? 'am' : 'pm'}`
-  }
-
   /* FUNCTIONS */
 
   addNewItem() {
     let newKey = this.state.itemCounter + 1;
-
-    let oldItems = this.deepcopy(this.state.items);
+    let oldItems = utils.deepcopy(this.state.items);
     oldItems[newKey] = {
       name: '',
       editing: true
     };
 
-    let oldOrder = this.deepcopy(this.state.order);
+    let oldOrder = utils.deepcopy(this.state.order);
     oldOrder.push(newKey);
 
     this.setState({
@@ -82,7 +94,7 @@ class App extends Component {
     let newOrder = this.state.order.slice()
     newOrder.push(itemName);
 
-    let newItems = this.deepcopy(this.state.items);
+    let newItems = utils.deepcopy(this.state.items);
     newItems[itemName] = {
       name: itemName
     }
@@ -90,14 +102,14 @@ class App extends Component {
       order: newOrder,
       items: newItems,
       newItem: '',
-      timestamp: this.timestamp()
+      timestamp: utils.timestamp()
     }, () => {
       formElt.reset();
     });
   }
 
   startEdit(itemName, itemKey) {
-    let newItems = this.deepcopy(this.state.items);
+    let newItems = utils.deepcopy(this.state.items);
     newItems[itemKey].editing = true;
     this.setState({
       items: newItems
@@ -108,11 +120,11 @@ class App extends Component {
     e.preventDefault();
     let formElt = e.target;
 
-    let newItems = this.deepcopy(this.state.items);
+    let newItems = utils.deepcopy(this.state.items);
     newItems[itemKey] = {
       name: newName,
       editing: false,
-      timestamp: this.timestamp()
+      timestamp: utils.timestamp()
     }
     this.setState({
       items: newItems,
@@ -122,9 +134,9 @@ class App extends Component {
   }
 
   deleteItem(itemKey) {
-    let newItems = this.deepcopy(this.state.items);
+    let newItems = utils.deepcopy(this.state.items);
     delete newItems[itemKey];
-    let newOrder = this.deepcopy(this.state.order);
+    let newOrder = utils.deepcopy(this.state.order);
     newOrder = newOrder.filter(k => k !== itemKey);
 
     this.setState({
@@ -135,19 +147,24 @@ class App extends Component {
   }
 
   render() {
+    // <HeaderLogo></HeaderLogo>
     return (
-      <div className="App">
+      <AppElt>
         <AddButton clickCb={this.addNewItem}/>
-        {this.state.order.map(dataItem => (
-            <ListItem data={this.state.items[dataItem]}
-                      key={dataItem}
-                      itemKey={dataItem}
-                      startEditCb={this.startEdit}
-                      submitCb={this.submitEdit}
-                      deleteCb={this.deleteItem}
-            />
-          ))}
-      </div>
+        <LogoElt src="./img/ThunkableBeaver.png" alt="Thunkable Logo" />
+        <ProjectsHeader>My Projects</ProjectsHeader>
+        <ListElt>
+          {this.state.order.map(dataItem => (
+              <ListItem data={this.state.items[dataItem]}
+                        key={dataItem}
+                        itemKey={dataItem}
+                        startEditCb={this.startEdit}
+                        submitCb={this.submitEdit}
+                        deleteCb={this.deleteItem}
+              />
+            ))}
+          </ListElt>
+      </AppElt>
     );
   }
 }

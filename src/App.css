@@ -1,10 +1,9 @@
 .App {
   text-align: center;
+  padding-top: 160px;
 }
 
 body {
-  background-image: url('./img/mock2.png');
-  background-repeat: no-repeat;
 }
 
 form {
