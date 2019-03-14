@@ -30,10 +30,13 @@ class App extends Component {
     }
     this.addNewItem = this.addNewItem.bind(this);
     this.deleteItem = this.deleteItem.bind(this);
-    this.editItem = this.editItem.bind(this);
+    this.startEdit = this.startEdit.bind(this);
     this.submitEdit = this.submitEdit.bind(this);
+    this.deleteItem = this.deleteItem.bind(this);
 
   }
+
+  // UTILITIES
 
   deepcopy(obj) {
     if (Array.isArray(obj)) {
@@ -49,6 +52,9 @@ class App extends Component {
     let monthString = ['Jan', 'Feb', 'Mar', 'Apr', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     return `${monthString[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`
   }
+
+
+  // ITEM FUNCTIONS
 
   addNewItem() {
     let newKey = this.state.itemCounter + 1;
@@ -90,11 +96,7 @@ class App extends Component {
     });
   }
 
-  deleteItem(e) {
-    alert('delete');
-  }
-
-  editItem(itemName, itemKey) {
+  startEdit(itemName, itemKey) {
     let newItems = this.deepcopy(this.state.items);
     newItems[itemKey].editing = true;
     this.setState({
@@ -118,6 +120,20 @@ class App extends Component {
     });
   }
 
+  deleteItem(itemKey) {
+    // debugger
+    let newItems = this.deepcopy(this.state.items);
+    delete newItems[itemKey];
+    let newOrder = this.deepcopy(this.state.order);
+    newOrder = newOrder.filter(k => k !== itemKey);
+
+    this.setState({
+      items: newItems,
+      order: newOrder
+    })
+
+  }
+
   render() {
     return (
       <div className="App">
@@ -126,9 +142,9 @@ class App extends Component {
             <ListItem data={this.state.items[dataItem]}
                       key={dataItem}
                       itemKey={dataItem}
-                      editCb={this.editItem}
-                      onChangeCb={this.addItemInputOnChange}
+                      startEditCb={this.startEdit}
                       submitCb={this.submitEdit}
+                      deleteCb={this.deleteItem}
             />
           ))}
       </div>
