@@ -36,7 +36,7 @@ class App extends Component {
 
   }
 
-  // UTILITIES
+  /* UTILITIES */
 
   deepcopy(obj) {
     if (Array.isArray(obj)) {
@@ -50,11 +50,10 @@ class App extends Component {
   timestamp() {
     let d = new Date();
     let monthString = ['Jan', 'Feb', 'Mar', 'Apr', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    return `${monthString[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`
+    return `${monthString[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()} ${d.getHours() % 12}:${d.getMinutes()} ${d.getHours() < 12 ? 'am' : 'pm'}`
   }
 
-
-  // ITEM FUNCTIONS
+  /* FUNCTIONS */
 
   addNewItem() {
     let newKey = this.state.itemCounter + 1;
@@ -90,7 +89,8 @@ class App extends Component {
     this.setState({
       order: newOrder,
       items: newItems,
-      newItem: ''
+      newItem: '',
+      timestamp: this.timestamp()
     }, () => {
       formElt.reset();
     });
@@ -111,7 +111,8 @@ class App extends Component {
     let newItems = this.deepcopy(this.state.items);
     newItems[itemKey] = {
       name: newName,
-      editing: false
+      editing: false,
+      timestamp: this.timestamp()
     }
     this.setState({
       items: newItems,
@@ -121,7 +122,6 @@ class App extends Component {
   }
 
   deleteItem(itemKey) {
-    // debugger
     let newItems = this.deepcopy(this.state.items);
     delete newItems[itemKey];
     let newOrder = this.deepcopy(this.state.order);
