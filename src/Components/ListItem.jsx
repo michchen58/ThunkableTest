@@ -60,7 +60,7 @@ class ListItem extends Component {
     // debugger
     return (
       <ItemElt className="list-item">
-        {this.props.data.editing
+        {this.props.data.editing 
           /* input box */
           ? <React.Fragment>
               <Input submitCb={event => this.props.submitCb(event, this.props.itemKey, this.state.text)}
@@ -79,7 +79,7 @@ class ListItem extends Component {
             </React.Fragment>
         }
         <DateElt>{this.props.data.timestamp || utils.timestamp()}</DateElt>
-        <DeleteItemButton clickCb={() => this.props.deleteCb(this.props.itemKey)}/>
+        <DeleteItemButton clickCb={() => this.props.modalCb(this.props.itemKey)} itemKey={this.props.itemKey} />
       </ItemElt>
     );
   }

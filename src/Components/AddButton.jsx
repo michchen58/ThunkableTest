@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const AddButtonElt = styled.div`
-  font-size: 2.5em;
+  font-size: 2.25em;
   position: absolute;
   top:90px;
   right: 7.5%;
@@ -16,7 +16,9 @@ const AddButtonElt = styled.div`
 `;
 
 const AddButton = props => (
-  <AddButtonElt className="noselect" onClick={() => props.clickCb()}>+</AddButtonElt>
+  <AddButtonElt className="noselect" onClick={() => props.clickCb()}>
+    <img src="../img/Plus Sign.svg" alt="Add Project"/>
+  </AddButtonElt>
 );
 
 export default AddButton;
