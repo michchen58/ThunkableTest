@@ -1,6 +1,6 @@
 ### `Run directions`
 
-Navigate to folder in Terminal
+Navigate to project's root folder in Terminal
 
 Run "npm start" to launch
 
